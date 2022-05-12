@@ -5380,27 +5380,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     itemTitle: String,
-    itemContent: String,
-    itemPrice: Number
+    itemDescription: String,
+    price: Number
   },
-  // beforeCreate() {
-  //   console.log("before create");
-  // },
   created: function created() {
     console.log("created");
-  } // beforeMount() {
-  //   console.log("before mount");
-  // },
-  // mounted() {
-  //   console.log("mounted");
-  // },
-  // beforeDestroy() {
-  //   console.log("before destroy");
-  // },
-  // destroyed() {
-  //   console.log("destroyed");
-  // }
-
+  }
 });
 
 /***/ }),
@@ -5454,6 +5439,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      //bookables: null,
       bookables: null,
       loading: false,
       columns: 3
@@ -5476,38 +5462,23 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     //this.loading = true;
-    setTimeout(function () {
-      _this.bookables = [{
-        id: 1,
-        title: "Cheap Villa !!!",
-        content: "A very cheap villa"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }, {
-        title: "Cheap Villa 2",
-        content: "A very cheap villa 2"
-      }];
-      _this.loading = false; // this.bookable1 = {
-      //   title: "Cheap Villa !!!",
-      //   content: "A very cheap villa"
-      // };
-      // this.bookable2 = {
-      //   title: "Cheap Villa 2",
-      //   content: "A very cheap villa 2"
-      // };
+    var p = new Promise(function (resolve, reject) {
+      console.log(resolve);
+      console.log(reject);
+      setTimeout(function () {
+        return resolve("Hello");
+      }, 3000);
+    }).then(function (result) {
+      return "Hello again " + result;
+    }).then(function (result) {
+      return console.log(result);
+    })["catch"](function (result) {
+      return console.log("Error ".concat(result));
+    });
+    console.log(p);
+    var request = axios.get("/api/bookables").then(function (response) {
+      _this.bookables = response.data;
+      _this.loading = false;
     }, 2000);
   }
 });
@@ -28389,11 +28360,13 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card" }, [
+  return _c("div", { staticClass: "card w-100" }, [
     _c("div", { staticClass: "card-body" }, [
       _c("h5", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.itemTitle))]),
       _vm._v(" "),
-      _c("p", { staticClass: "card-text" }, [_vm._v(_vm._s(_vm.itemContent))]),
+      _c("p", { staticClass: "card-text" }, [
+        _vm._v(_vm._s(_vm.itemDescription)),
+      ]),
     ]),
   ])
 }
@@ -28431,15 +28404,18 @@ var render = function () {
               "div",
               { key: "row" + row, staticClass: "row mb-4" },
               [
-                _vm._l(_vm.bookablesInRow(row), function (bookable, column) {
+                _vm._l(_vm.bookablesInRow(row), function (item, column) {
                   return _c(
                     "div",
-                    { key: "row" + row + column, staticClass: "col" },
+                    {
+                      key: "row" + row + column,
+                      staticClass: "col d-flex align-items-stretch",
+                    },
                     [
                       _c("bookable-list-item", {
                         attrs: {
-                          "item-title": bookable.title,
-                          "item-content": bookable.content,
+                          "item-title": item.title,
+                          "item-description": item.description,
                           price: 1000,
                         },
                       }),
